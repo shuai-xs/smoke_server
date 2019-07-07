@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suineng.dao.AlertMapper">
+		<resultMap id="AlertResultMap"
+				   type="com.suineng.bean.Alert">
+			<id column="id" jdbcType="VARCHAR" property="id" />
+			<result column="moduleId" jdbcType="VARCHAR" property="moduleId" />
+			<result column="zoneId" jdbcType="SMALLINT" property="zoneId" />
+			<result column="metricType" jdbcType="VARCHAR" property="metricType" />
+			<result column="alertType" jdbcType="SMALLINT" property="alertType" />
+			<result column="metricValue" jdbcType="FLOAT" property="metricValue" />
+			<result column="status" jdbcType="SMALLINT" property="status" />
+			<result column="createTime" jdbcType="BIGINT" property="createTime" />
+			<result column="confirmTime" jdbcType="BIGINT" property="confirmTime" />
+		</resultMap>
+       <insert id="insertAlert" parameterType="com.suineng.bean.Alert">
+		insert into alert (id,moduleId,
+		zoneId,metricType, alertType,metricValue,
+		status,createTime,confirmTime
+		)
+		values
+		(#{id,jdbcType=VARCHAR},
+		 #{moduleId,jdbcType=VARCHAR},
+		 #{zoneId,jdbcType=SMALLINT},
+		 #{metricType,jdbcType=SMALLINT},
+		 #{alertType,jdbcType=SMALLINT},
+		 #{metricValue,jdbcType=FLOAT},
+		 #{status,jdbcType=SMALLINT},
+		 #{createTime,jdbcType=BIGINT},
+		 #{confirmTime,jdbcType=BIGINT}
+		)
+	</insert>
+
+	<select id="getAlert" parameterType="com.suineng.bean.Alert"
+			resultMap="AlertResultMap">
+		select *
+		from alert where 1=1
+		<if test="alert.id != null">
+			and id = #{alert.id}
+		</if>
+		<if test="alert.moduleId != null">
+			and moduleId = #{alert.moduleId}
+		</if>
+		<if test="alert.zoneId != 0">
+			and zoneId = #{alert.zoneId}
+		</if>
+		<if test="alert.metricType != null">
+			and metricType = #{alert.metricType}
+		</if>
+		<if test="alert.alertType != 0">
+			and alertType = #{alert.alertType}
+		</if>
+		<if test="alert.status != -1">
+			and status = #{alert.status}
+		</if>
+		<if test="alert.startTime != -1">
+			and createTime &gt;= #{alert.startTime}
+		</if>
+		<if test="alert.endTime != -1">
+			and createTime &lt;= #{alert.endTime}
+		</if>
+		order by createTime limit #{curIndex}, #{pageSize}
+	</select>
+
+
+	<select id="countAlertNum" parameterType="com.suineng.bean.Alert"
+			resultType="java.lang.Integer">
+		select count(*)
+		from alert where 1=1
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="moduleId != null">
+			and moduleId = #{moduleId}
+		</if>
+		<if test="zoneId != 0">
+			and zoneId = #{zoneId}
+		</if>
+		<if test="metricType != null">
+			and metricType = #{metricType}
+		</if>
+		<if test="alertType != 0">
+			and alertType = #{alertType}
+		</if>
+		<if test="status != -1">
+			and status = #{status}
+		</if>
+		<if test="startTime != -1">
+			and confirmTime &gt;= #{startTime}
+		</if>
+		<if test="endTime != -1">
+			and confirmTime &lt;= #{endTime}
+		</if>
+	</select>
+
+
+	<select id="queryAlert" resultType="com.suineng.bean.Alert">
+		select * from alert where createTime &gt;= #{startTime} and createTime &lt;= #{endTime} and status = #{status} order by createTime desc limit #{curIndex}, #{pageSize};
+	</select>
+
+	<select id="queryAlertAll" resultType="com.suineng.bean.Alert">
+		select * from alert where createTime &gt;= #{startTime} and createTime &lt;= #{endTime} order by createTime desc limit #{curIndex}, #{pageSize};
+	</select>
+
+	<select id="queryAlertWithZone" resultType="com.suineng.bean.Alert">
+		select * from alert where createTime &gt;= #{startTime} and createTime &lt;= #{endTime} and deviceType= #{deviceType}
+		and zoneId= #{zoneId} and status = #{status} order by createTime desc limit #{curIndex}, #{pageSize};
+	</select>
+
+	<select id="queryAlertWithZoneAll" resultType="com.suineng.bean.Alert">
+		select * from alert where createTime &gt;= #{startTime} and createTime &lt;= #{endTime} and deviceType= #{deviceType}
+		and zoneId= #{zoneId} order by createTime desc limit #{curIndex}, #{pageSize};
+	</select>
+
+	<select id="queryAlertWithDevice" resultType="com.suineng.bean.Alert">
+		select * from alert where createTime &gt;= #{startTime} and createTime &lt;= #{endTime} and deviceType= #{deviceType}
+		and status = #{status} order by createTime desc limit #{curIndex}, #{pageSize};
+	</select>
+
+	<select id="queryAlertWithDeviceAll" resultType="com.suineng.bean.Alert">
+		select * from alert where createTime &gt;= #{startTime} and createTime &lt;= #{endTime} and deviceType= #{deviceType}
+		order by createTime desc limit #{curIndex}, #{pageSize};
+	</select>
+
+	<select id="countAlert" resultType="java.lang.Integer">
+		select count(*) from alert where createTime &gt;= #{startTime} and createTime &lt;= #{endTime} and status=#{status};
+	</select>
+
+	<select id="countAlertWithMetricType" resultType="java.lang.Integer">
+		select count(*) from alert where createTime &gt;= #{startTime} and createTime &lt;= #{endTime} and status=#{status} and metricType = #{metricType};
+	</select>
+
+	<select id="countAlertAll" resultType="java.lang.Integer">
+		select count(*) from alert where createTime &gt;= #{startTime} and createTime &lt;= #{endTime};
+	</select>
+
+	<select id="countWithZone" resultType="java.lang.Integer">
+		select count(*) from alert where createTime &gt;= #{startTime} and createTime &lt;= #{endTime}
+		and deviceType=#{deviceType} and zoneId = #{zoneId} and status=#{status};
+	</select>
+
+	<select id="countWithZoneAll" resultType="java.lang.Integer">
+		select count(*) from alert where createTime &gt;= #{startTime} and createTime &lt;= #{endTime}
+		and deviceType=#{deviceType} and zoneId = #{zoneId};
+	</select>
+
+	<select id="countWithDevice" resultType="java.lang.Integer">
+		select count(*) from alert where createTime &gt;= #{startTime} and createTime &lt;= #{endTime}
+		and deviceType=#{deviceType} and status=#{status};
+	</select>
+
+	<select id="countWithDeviceAll" resultType="java.lang.Integer">
+		select count(*) from alert where createTime &gt;= #{startTime} and createTime &lt;= #{endTime}
+		and deviceType=#{deviceType};
+	</select>
+
+	<select id="updateAlert">
+		update alert set status = #{status},confirmTime = #{confirmTime} where id = #{id} and createTime = #{createTime};
+	</select>
+
+
+</mapper>

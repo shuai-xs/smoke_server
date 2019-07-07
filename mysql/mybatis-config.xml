@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 加载类路径下的属性文件 -->
+	<!--properties resource="classpath:/config/mysql/jdbc.properties" /-->
+
+	<properties resource="./config/mysql/jdbc.properties" />
+	<settings>
+		<!-- 打印查询语句 -->
+		<!-- <setting name="logImpl" value="STDOUT_LOGGING" /> -->
+		<setting name="logImpl" value="STDOUT_LOGGING" />
+	</settings>
+
+	<!-- 设置一个默认的连接环境信息 -->
+	<environments default="mysql_developer">
+		<environment id="mysql_developer">
+			<!-- mybatis使用jdbc事务管理方式 -->
+			<transactionManager type="JDBC"></transactionManager>
+			<!-- mybatis使用连接池方式来获取连接 -->
+			<dataSource type="POOLED">
+				<!-- 配置与数据库交互的4个必要属性，不要直接写，单独写在一个配置文件中 -->
+				<property name="driver" value="${driverClasss}" />
+				<property name="url" value="${jdbcUrl}" />
+				<property name="username" value="${username}" />
+				<property name="password" value="${password}" />
+			</dataSource>
+		</environment>
+	</environments>
+
+	<!-- 加载映射文件 -->
+	<mappers>
+		<mapper resource="com/suineng/mapper/AlertMapper.xml" />
+		<mapper resource="com/suineng/mapper/LoginMapper.xml" />
+		<mapper resource="com/suineng/mapper/DeviceMapper.xml" />
+		<mapper resource="com/suineng/mapper/MetricMapper.xml" />
+		<mapper resource="com/suineng/mapper/PositionMapper.xml" />
+	</mappers>
+
+</configuration>

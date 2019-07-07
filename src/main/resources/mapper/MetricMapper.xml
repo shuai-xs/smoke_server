@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suineng.dao.MetricMapper">
+	<resultMap id="MetricResultMap"
+		type="com.suineng.bean.Metric">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="time" jdbcType="BIGINT" property="time" />
+		<result column="value_0" jdbcType="FLOAT" property="value0" />
+	</resultMap>
+	<insert id="insert" parameterType="com.suineng.bean.Metric">
+		insert IGNORE into tbl_metric
+		(id,
+		time, value_0)
+		values
+		(#{id,jdbcType=VARCHAR},
+		#{time,jdbcType=BIGINT},
+		#{value0,jdbcType=FLOAT}
+		)
+		on duplicate key
+		update value_0=${value0}
+	</insert>
+
+	<select id="getMetricLimit" parameterType="map"
+		resultMap="MetricResultMap">
+		select *
+		from tbl_metric where
+		<if test="ids != null">
+			id in
+			<foreach item="item" index="index" collection="ids" open="("
+				separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="from != 0">
+			and time <![CDATA[ >= ]]>
+			#{from}
+		</if>
+		<if test="to != 0">
+			and time <![CDATA[ <= ]]>
+			#{to}
+		</if>
+	    limit #{pageIndex},#{pageSize}
+	</select>
+
+	<select id="getMetric" parameterType="map"
+		resultMap="MetricResultMap">
+		select *
+		from tbl_metric where
+		<if test="ids != null">
+			id in
+			<foreach item="item" index="index" collection="ids" open="("
+				separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="from != 0">
+			and time <![CDATA[ >= ]]> #{from}
+		</if>
+		<if test="to != 0">
+			and time <![CDATA[ <= ]]> #{to}
+		</if>
+		limit 10000;
+	</select>
+</mapper>

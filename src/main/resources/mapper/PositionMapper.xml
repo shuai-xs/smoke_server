@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suineng.dao.PositionMapper">
+	<insert id="insert" parameterType="java.lang.Long">
+		insert into tbl_position
+		(time
+		)
+		values
+		(#{value,jdbcType=BIGINT}
+		)
+		on duplicate key
+		update
+		time=${value}
+	</insert>
+
+	<select id="getPosition" resultType="java.lang.Long">
+		select time from
+		tbl_position limit 1;
+	</select>
+</mapper>

@@ -1,0 +1,30 @@
+[
+	{
+		"metricName": "RQH",
+		"startMonth": 5,
+		"endMonth": 10,
+		"highThreshold": 10.2,
+		"lowThreshold": 1
+	},
+	{
+		"metricName": "RQH",
+		"startMonth": 1,
+		"endMonth": 4,
+		"highThreshold": 10.2,
+		"lowThreshold": 0.1
+	},
+	{
+		"metricName": "ZHT",
+		"startMonth": 1,
+		"endMonth": 4,
+		"highThreshold": 99.2,
+		"lowThreshold": 56.2
+	},
+	{
+		"metricName": "DLT",
+		"startMonth": 1,
+		"endMonth": 4,
+		"highThreshold": 45.2,
+		"lowThreshold": 10.2
+	}
+]

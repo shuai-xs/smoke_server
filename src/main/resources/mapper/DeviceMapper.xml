@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suineng.dao.DeviceMapper">
+	<resultMap id="DeviceResultMap"
+		type="com.suineng.bean.Device">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="module_id" jdbcType="VARCHAR"
+			property="moduleId" />
+		<result column="zone_id" jdbcType="VARCHAR" property="zoneId" />
+		<result column="device_type" jdbcType="VARCHAR"
+			property="deviceType" />
+		<result column="controlType" jdbcType="VARCHAR" property="controlType" />
+		<result column="controlSwitch" jdbcType="VARCHAR" property="controlSwitch" />
+		<result column="switchStatus" jdbcType="VARCHAR" property="switchStatus" />
+		<result column="highState" jdbcType="DOUBLE" property="highState" />
+		<result column="lowState" jdbcType="DOUBLE" property="lowState" />
+		<result column="status" jdbcType="BOOLEAN" property="status" />
+		<result column="alarm" jdbcType="BOOLEAN" property="alarm" />
+	</resultMap>
+	<insert id="insert" parameterType="com.suineng.bean.Device">
+		insert ignore into tbl_device
+		(id,
+		module_id, zone_id,
+		device_type, controlType, controlSwitch, switchStatus, highState, lowState, status, alarm
+		)
+		values
+		(#{id,jdbcType=VARCHAR}, #{moduleId,jdbcType=VARCHAR},
+		#{zoneId,jdbcType=VARCHAR},
+		#{deviceType,jdbcType=VARCHAR},
+		#{controlType,jdbcType=VARCHAR},
+		#{controlSwitch,jdbcType=VARCHAR},
+		#{switchStatus,jdbcType=VARCHAR},
+		#{highState,jdbcType=DOUBLE},
+		#{lowState,jdbcType=DOUBLE},
+		#{status,jdbcType=BOOLEAN},
+		#{alarm,jdbcType=BOOLEAN}
+		)
+	</insert>
+
+	<!-- insert id="insert" parameterType="com.suineng.entity.Device"> insert 
+		into tbl_device (id, module_id, zone_id, device_type, op_state, status, alarm 
+		) values (#{id,jdbcType=VARCHAR}, #{module_id,jdbcType=VARCHAR}, #{zone_id,jdbcType=VARCHAR}, 
+		#{device_type,jdbcType=VARCHAR}, #{op_state,jdbcType=DOUBLE}, #{status,jdbcType=BOOLEAN}, 
+		#{alarm,jdbcType=BOOLEAN} ) </insert -->
+
+	<select id="updateAlarm" parameterType="com.suineng.bean.Device">
+		update tbl_device set alarm = #{alarm} where id = #{id};
+	</select>
+
+	<select id="updateStatus" parameterType="com.suineng.bean.Device">
+		update tbl_device set status = #{status} where id = #{id};
+	</select>
+
+	<select id="updateOpstate" parameterType="com.suineng.bean.Device">
+		update tbl_device set highState = #{highState},lowState=#{lowState},controlType=#{controlType},controlSwitch=#{controlSwitch},switchStatus=#{switchStatus} where id = #{id};
+	</select>
+
+	<select id="getDevice" parameterType="com.suineng.bean.Device"
+		resultMap="DeviceResultMap">
+		select *
+		from tbl_device where 1=1
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="moduleId != ''">
+			and module_id = #{moduleId}
+		</if>
+		<if test="zoneId != 0">
+			and zone_id = #{zoneId}
+		</if>
+		<if test="deviceType != ''">
+			and device_type = #{deviceType}
+		</if>
+	</select>
+
+	<select id="getZone" resultMap="DeviceResultMap">
+		select distinct module_id,
+		zone_id
+		from tbl_device
+	</select>
+</mapper>

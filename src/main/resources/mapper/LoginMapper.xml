@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suineng.dao.LoginMapper">
+    <insert id="createUser">
+		insert into user (userName,passwd)
+		values(#{userName},#{passwd})
+	</insert>
+
+	<insert id="updatePasswd">
+		update user set passwd=#{passwd} where userName = #{userName};
+	</insert>
+
+    <select id="queryUser" resultType="com.suineng.bean.UserInfo">
+		select * from user where userName = #{userName};
+	</select>
+</mapper>
